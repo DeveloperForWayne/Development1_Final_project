@@ -8,6 +8,7 @@ const URLbalAdr = "module=account&action=balance&tag=latest";
 const URLtxlist = "module=account&action=txlist&startblock=0&endblock=99999999&page=1&offset=10&sort=desc";
 const myApiKey = "&apikey=92XWW7PZJVD59QXBRI6S6TUUWM7MG6QP3S";
 const myAccntAdr = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
+const weiToEth = 1000000000000000000;
 
 function getData(url) {
     return fetch(url)
@@ -45,7 +46,7 @@ function getMarketCapital() {
     getData(URLSite + URLTotalSupply + myApiKey)
         .then(function (result) {
             // Result returned in Wei, to get value in Ether divide resultAbove/1000000000000000000
-            return result.result / 1000000000000000000;
+            return result.result / weiToEth;
         }).then(function (result) {
             caculateTotalMktCap(result);
         });
@@ -107,7 +108,7 @@ function getAccountBalance() {
     getData(URLSite + URLbalAdr + "&address=" + myAccntAdr + myApiKey)
         .then(function (result) {
             // Get the account balance
-            let accountBalance = result.result / 1000000000000000000;
+            let accountBalance = result.result / weiToEth;
             let accountBalanceDis = new Intl.NumberFormat("en-US", { maximumFractionDigits: 18 }).format(accountBalance) + " Ether";
             document.getElementById("accountBalance").innerHTML = accountBalanceDis;
             return accountBalance;
@@ -149,8 +150,8 @@ function getTXlist() {
                 Block.innerHTML = arr.blockNumber;
                 From.innerHTML = arr.from.substring(0, 18);
                 To.innerHTML = arr.to.substring(0, 18);
-                Value.innerHTML = (arr.value / 1000000000000000000).toFixed(5);;
-                TxFee.innerHTML = arr.gasPrice * arr.gasUsed / 1000000000000000000;
+                Value.innerHTML = new Intl.NumberFormat("en-US", { maximumFractionDigits: 10 }).format(arr.value / weiToEth);
+                TxFee.innerHTML = arr.gasPrice * arr.gasUsed / weiToEth;
 
             }
         });
