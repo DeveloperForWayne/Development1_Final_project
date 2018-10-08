@@ -41,22 +41,18 @@ function commarize(inputNum) {
 
 // Get and set Total Market Capitalization
 function getMarketCapital() {
-    let totalSupplyEth, totalSupplyWei;
-
     // Get Total Supply of Ether
     getData(URLSite + URLTotalSupply + myApiKey)
         .then(function (result) {
-            totalSupplyWei = result.result;
             // Result returned in Wei, to get value in Ether divide resultAbove/1000000000000000000
-            totalSupplyEth = totalSupplyWei / 1000000000000000000;
-            return totalSupplyEth;
+            return result.result / 1000000000000000000;
         }).then(function (result) {
             caculateTotalMktCap(result);
         });
 }
 
 // Get ETHER Last Price and caculate Total Market Capitalization
-function caculateTotalMktCap(totalSupplyEth) {
+function caculateTotalMktCap(totalSupply) {
     getData(URLSite + URLLastPrice + myApiKey)
         .then(function (result) {
             // Get ETHER Last Price
@@ -64,7 +60,7 @@ function caculateTotalMktCap(totalSupplyEth) {
             let ethbtc = result.result.ethbtc;
             document.getElementById("LastPrice").innerHTML = lastPrice + " @ " + ethbtc + " BTC/ETH";
             // Caculate Total Market Capitalization
-            let marketCap = commarize(totalSupplyEth * lastPrice);
+            let marketCap = commarize(totalSupply * result.result.ethusd);
             document.getElementById("TotalMktCap").innerHTML = "MARKET CAP OF $" + marketCap;
         });
 }
@@ -134,17 +130,33 @@ function caculateEtherValue(balance) {
 
 // Get and set the Transactions list
 function getTXlist() {
-    let outputHTML = "";
+    let table = document.getElementById("AccountTX");
     getData(URLSite + URLtxlist + "&address=" + myAccntAdr + myApiKey)
         .then(function (result) {
             for (let i = 0; i < result.result.length; i++) {
                 let arr = result.result[i];
-                outputHTML = outputHTML + "<li>" + arr.hash + " " + arr.blockNumber + " " + arr.from + " " + arr.to + " " + arr.value + " " + arr.gasPrice * arr.gasUsed / 1000000000000000000 + "</li>";
+
+                let row = table.insertRow(i + 1);
+
+                let TxHash = row.insertCell(0);
+                let Block = row.insertCell(1);
+                let From = row.insertCell(2);
+                let To = row.insertCell(3);
+                let Value = row.insertCell(4);
+                let TxFee = row.insertCell(5);
+
+                TxHash.innerHTML = arr.hash.substring(0, 18);
+                Block.innerHTML = arr.blockNumber;
+                From.innerHTML = arr.from.substring(0, 18);
+                To.innerHTML = arr.to.substring(0, 18);
+                Value.innerHTML = (arr.value / 1000000000000000000).toFixed(5);;
+                TxFee.innerHTML = arr.gasPrice * arr.gasUsed / 1000000000000000000;
+
             }
-            document.getElementById("TXlist").innerHTML = outputHTML;
         });
 }
 
+// Get Dashboard and Account infotmation
 function GetDashboard() {
     getMarketCapital();
     getLastBlock();

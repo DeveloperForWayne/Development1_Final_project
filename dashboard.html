@@ -8,18 +8,49 @@
 </head>
 
 <body onload="GetDashboard()">
+    <img src="EtherscanLogo.png" alt="Etherscan">
     <div class="dashboard_bk">
-            <h1 id="TotalMktCap"></h1>
-            <h1 id="LastPrice"></h1>
-            <h1 id="LastBlockNo"></h1>
-            <h1 id="Difficulty"></h1>
-            <h1 id="GasPrice"></h1>
-            <h2 id="accountBalance"></h2>
-            <h2 id="EtherValue"></h2>
+        <div class="cap_div" id="TotalMktCap"></div>
+        <div class="lastPrice_div" id="LastPrice"></div>
+
+        <div class="status_div">
+            <div>
+                <div class="lastbk_div">LAST BLOCK</div>
+                <div class="blockNo_div" id="LastBlockNo"></div>
+            </div>
+            <div>
+                <div class="lastbk_div">Network Difficulty</div>
+                <div class="blockNo_div" id="Difficulty"></div>
+            </div>
+            <div>
+                <div class="lastbk_div">Gas Price</div>
+                <div class="gasPrice_div" id="GasPrice"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="TXlist"></div>
-
+    <div class="account_div">Account Overview</div>
+    <hr>
+    <div class="balance_dis">
+        <div class="balance_lab">Balance:</div>
+        <div id="accountBalance"></div>
+    </div>
+    <div class="balance_dis">
+        <div class="balance_lab">Ether Value:</div>
+        <div id="EtherValue"></div>
+    </div>
+    <hr>
+    <div class="account_div">Transcations</div>
+    <table id="AccountTX">
+        <tr>
+            <th>TxHash</th>
+            <th>Block</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Value(Ether)</th>
+            <th>TxFee(Ether)</th>
+        </tr>
+    </table>
 </body>
 
 </html>
